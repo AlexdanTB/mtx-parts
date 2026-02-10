@@ -1,3 +1,43 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
+
+@theme {
+    --font-sans: "Inter", ui-sans-serif, sans-serif;
+
+    --color-tiger-flame-50: #ffede6;
+    --color-tiger-flame-100: #ffdbcc;
+    --color-tiger-flame-200: #feb89a;
+    --color-tiger-flame-300: #fe9467;
+    --color-tiger-flame-400: #fe7134;
+    --color-tiger-flame-500: #fe4d01;
+    --color-tiger-flame-600: #cb3e01;
+    --color-tiger-flame-700: #982e01;
+    --color-tiger-flame-800: #651f01;
+    --color-tiger-flame-900: #330f00;
+    --color-tiger-flame-950: #240b00;
+
+    --color-charcoal-brown-50: #f3f3f2;
+    --color-charcoal-brown-100: #e7e7e4;
+    --color-charcoal-brown-200: #cececa;
+    --color-charcoal-brown-300: #b6b6af;
+    --color-charcoal-brown-400: #9d9d95;
+    --color-charcoal-brown-500: #85857a;
+    --color-charcoal-brown-600: #6a6a62;
+    --color-charcoal-brown-700: #505049;
+    --color-charcoal-brown-800: #353531;
+    --color-charcoal-brown-900: #1b1b18;
+    --color-charcoal-brown-950: #131311;
+
+    --color-soft-linen-50: #f4f6ef;
+    --color-soft-linen-100: #eaedde;
+    --color-soft-linen-200: #d5dbbd;
+    --color-soft-linen-300: #c0c99c;
+    --color-soft-linen-400: #abb77b;
+    --color-soft-linen-500: #96a45b;
+    --color-soft-linen-600: #788448;
+    --color-soft-linen-700: #5a6336;
+    --color-soft-linen-800: #3c4224;
+    --color-soft-linen-900: #1e2112;
+    --color-soft-linen-950: #15170d;
+}
