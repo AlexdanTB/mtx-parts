@@ -58,8 +58,8 @@
 
             <div class="hidden lg:flex items-center justify-center w-full gap-25">
                 @for (enlace of enlaces; track $index) {
-                    @if (enlace.sub) {
-                        <div class="relative group">
+                @if (enlace.sub) {
+                <div class="relative group">
                     <button
                         class="flex items-center gap-1 text-white group-hover:text-charcoal-brown-800 font-medium transition-colors outline-none">
                         {{enlace.titulo}}
@@ -71,14 +71,16 @@
                     <div
                         class="absolute left-0 mt-2 w-52 bg-charcoal-brown-800 rounded-lg shadow-2xl opacity-50 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-tiger-flame-900">
                         @for (subenlace of enlace.sub; track $index) {
-                        <a href="#" class="block px-4 py-3 text-white hover:text-tiger-flame-500">{{subenlace.titulo}}</a>
-                }
+                        <a href="#"
+                            class="block px-4 py-3 text-white hover:text-tiger-flame-500">{{subenlace.titulo}}</a>
+                        }
                     </div>
                 </div>
-                    }@else {
-                        <a href="#" class="text-white font-medium hover:text-charcoal-brown-800  transition-colors">{{enlace.titulo}}</a>
-                    }
-                
+                }@else {
+                <a href="#"
+                    class="text-white font-medium hover:text-charcoal-brown-800  transition-colors">{{enlace.titulo}}</a>
+                }
+
                 }
 
                 <!--a href="#" class="text-white hover:text-charcoal-brown-800 font-medium transition-colors">Company</a>
@@ -89,12 +91,12 @@
         <div [class.hidden]="!isMenuOpen"
             class="lg:hidden mt-4 pb-4 border-t border-charcoal-brown-800 animate-fade-in-down">
             <div class="flex flex-col gap-2 pt-4 font-medium">
-                <a href="#" class="text-white p-2 hover:bg-tiger-flame-900 rounded">Home</a>
-
+                @for (enlace of enlaces; track $index) {
+                @if (enlace.sub) {
                 <div>
                     <button (click)="isSubMenuOpen=!isSubMenuOpen"
                         class="w-full flex justify-between items-center text-white p-2 hover:bg-tiger-flame-900 rounded">
-                        Services
+                        {{enlace.titulo}}
                         <svg class="w-4 h-4 transition-transform" [class.rotate-180]="isSubMenuOpen" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -102,15 +104,16 @@
                     </button>
 
                     <div [class.hidden]="!isSubMenuOpen" class="bg-charcoal-brown-800 ml-4 mt-1 rounded-lg border-l-2">
-                        <a href="#" class="block p-3 text-white/90 text-sm hover:text-charcoal-brown-800">Service 1</a>
-                        <a href="#" class="block p-3 text-white/90 text-sm hover:text-charcoal-brown-800">Service 2</a>
-                        <a href="#" class="block p-3 text-white/90 text-sm hover:text-charcoal-brown-800">Service 3</a>
-                        <a href="#" class="block p-3 text-white/90 text-sm hover:text-charcoal-brown-800">Service 4</a>
+                        @for (subenlace of enlace.sub; track $index) {
+                        <a href="#" class="block p-3 text-white/90 text-sm hover:text-charcoal-brown-800">{{subenlace.titulo}}</a>
+                        }
                     </div>
                 </div>
+                }@else {
+                <a href="#" class="text-white p-2 hover:bg-tiger-flame-900 rounded">{{enlace.titulo}}</a>
+                }
 
-                <a href="#" class="text-white p-2 hover:bg-tiger-flame-900 rounded">Company</a>
-                <a href="#" class="text-white p-2 hover:bg-tiger-flame-900 rounded">Contact</a>
+                }
             </div>
         </div>
     </div>
