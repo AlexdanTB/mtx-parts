@@ -57,28 +57,12 @@
             </div>
 
             <div class="hidden lg:flex items-center justify-center w-full gap-25">
-                <a href="#" class="text-white font-medium hover:text-charcoal-brown-800  transition-colors">Home</a>
+                @for (enlace of enlaces; track $index) {
+                <a href="#" class="text-white font-medium hover:text-charcoal-brown-800  transition-colors">{{enlace.titulo}}</a>
+                }
 
-                <div class="relative group">
-                    <button
-                        class="flex items-center gap-1 text-white group-hover:text-charcoal-brown-800 font-medium transition-colors outline-none">
-                        Services
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-
-                    <div
-                        class="absolute left-0 mt-2 w-52 bg-charcoal-brown-800 rounded-lg shadow-2xl opacity-50 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-tiger-flame-900">
-                        <a href="#" class="block px-4 py-3 text-white hover:text-tiger-flame-500">Service 1</a>
-                        <a href="#" class="block px-4 py-3 text-white hover:text-tiger-flame-500">Service 2</a>
-                        <a href="#" class="block px-4 py-3 text-white hover:text-tiger-flame-500">Service 3</a>
-                        <a href="#" class="block px-4 py-3 text-white hover:text-tiger-flame-500">Service 4</a>
-                    </div>
-                </div>
-
-                <a href="#" class="text-white hover:text-charcoal-brown-800 font-medium transition-colors">Company</a>
-                <a href="#" class="text-white hover:text-charcoal-brown-800 font-medium transition-colors">Contact</a>
+                <!--a href="#" class="text-white hover:text-charcoal-brown-800 font-medium transition-colors">Company</a>
+                <a href="#" class="text-white hover:text-charcoal-brown-800 font-medium transition-colors">Contact</a-->
             </div>
         </div>
 
