@@ -4,3 +4,4 @@ import { HomePage } from './features/home-page/home-page';
 export const routes: Routes = [
     {path:'', component: HomePage}
 ];
+    
