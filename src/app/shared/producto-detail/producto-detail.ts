@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
 export class ProductoDetail {
 
   cantidad: number = 0;
-
+  isEspecificOpen: boolean= false;
   incrementarC(){
     this.cantidad++;
   }
@@ -17,5 +17,7 @@ export class ProductoDetail {
     if(this.cantidad > 0)
     this.cantidad--;
   }
+
+
 
 }
