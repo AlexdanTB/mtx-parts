@@ -8,4 +8,14 @@ import { Component } from '@angular/core';
 })
 export class ProductoDetail {
 
+  cantidad: number = 0;
+
+  incrementarC(){
+    this.cantidad++;
+  }
+  decrementarC(){
+    if(this.cantidad > 0)
+    this.cantidad--;
+  }
+
 }
