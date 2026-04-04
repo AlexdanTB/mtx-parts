@@ -1,0 +1,84 @@
+<div
+  class="relative w-full h-[60vh] md:h-[85vh] overflow-hidden bg-charcoal-brown-800"
+  (mouseenter)="pauseAutoPlay()"
+  (mouseleave)="startAutoPlay()">
+
+  <!-- SLIDES -->
+  @for (slide of slides; track slide.id; let i = $index) {
+    <div
+      class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+      [class.opacity-100]="currentSlide === i"
+      [class.opacity-0]="currentSlide !== i"
+      [class.z-10]="currentSlide === i"
+      [class.z-0]="currentSlide !== i">
+
+      <div class="absolute inset-0 bg-black/55 z-10"></div>
+      <img
+        [src]="slide.imagen"
+        [alt]="slide.titulo"
+        class="absolute inset-0 w-full h-full object-cover grayscale-[0.2]" />
+
+      <!-- CONTENIDO -->
+      <div class="relative z-20 flex flex-col items-center justify-center h-full text-center px-6">
+
+        <!-- Badge con líneas a los costados -->
+        <div class="flex items-center gap-3 mb-5">
+          <span class="w-8 h-0.5 bg-tiger-flame-500 block"></span>
+          <span class="text-tiger-flame-500 font-bold tracking-[0.25em] uppercase text-xs">
+            {{ slide.subtitulo }}
+          </span>
+          <span class="w-8 h-0.5 bg-tiger-flame-500 block"></span>
+        </div>
+
+        <!-- Título -->
+        <h1 class="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter mb-5 drop-shadow-lg leading-none">
+          {{ slide.titulo }}
+        </h1>
+
+        <!-- Descripción -->
+        <p class="text-gray-300 text-base md:text-lg max-w-xl font-medium mb-8 leading-relaxed">
+          {{ slide.descripcion }}
+        </p>
+      </div>
+    </div>
+  }
+
+  <!-- BOTÓN PREV -->
+  <button
+    (click)="onPrev()"
+    aria-label="Slide anterior"
+    class="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 bg-charcoal-brown-800/60 text-white hover:bg-tiger-flame-500 hover:text-charcoal-brown-800 transition-all border border-white/10 rounded-full backdrop-blur-sm">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+    </svg>
+  </button>
+
+  <!-- BOTÓN NEXT -->
+  <button
+    (click)="onNext()"
+    aria-label="Siguiente slide"
+    class="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 bg-charcoal-brown-800/60 text-white hover:bg-tiger-flame-500 hover:text-charcoal-brown-800 transition-all border border-white/10 rounded-full backdrop-blur-sm">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+    </svg>
+  </button>
+
+  <!-- DOTS -->
+  <div class="absolute bottom-7 left-1/2 -translate-x-1/2 z-30 flex gap-2 items-center">
+    @for (slide of slides; track slide.id; let i = $index) {
+      <button
+        (click)="setSlide(i)"
+        [attr.aria-label]="'Ir al slide ' + (i + 1)"
+        class="h-1 transition-all duration-300 rounded-full"
+        [class.w-8]="currentSlide === i"
+        [class.bg-tiger-flame-500]="currentSlide === i"
+        [class.w-2]="currentSlide !== i"
+        [class.bg-white]="currentSlide !== i"
+        [class.opacity-40]="currentSlide !== i">
+      </button>
+    }
+  </div>
+
+  
+
+</div>
