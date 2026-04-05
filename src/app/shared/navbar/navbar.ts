@@ -12,7 +12,7 @@ import { Enlace } from '../../models/enlace';
 export class Navbar {
 
   enlaces: Enlace[] = [
-    { titulo: 'Inicio', link: '/home' },
+    { titulo: 'Inicio', link: '' },
     {
       titulo: 'Catálogo',
       link: '/catalogo',
