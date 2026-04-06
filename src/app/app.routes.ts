@@ -6,6 +6,7 @@ import { ProductosPage } from './features/productos-page/productos-page';
 import { Register } from './shared/register/register';
 import { Login } from './shared/login/login';
 import { canActiveGuard } from './guards/can-active-guard';
+import { LoginRegisterPage } from './features/login-register-page/login-register-page';
 
 export const routes: Routes = [
     { path: '', component: HomePage },
@@ -13,7 +14,8 @@ export const routes: Routes = [
     {path: 'nosotros', component: NosotrosPage },
     { path: 'repuestos', component: ProductosPage },
     {path:'registrarse',component: Register},
-    {path:'login',component: Login,canActivate: [canActiveGuard]},
+    {path:'logins',component:LoginRegisterPage ,canActivate: [canActiveGuard]},
+    {path:'login',component:Login ,}
 
 
 ];
