@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { Enlace } from '../../models/enlace';
+import { AuthService } from '../../service/auth-service';
+import { UsuariosService } from '../../service/usuarios-service';
 
 @Component({
   selector: 'app-navbar',
@@ -37,7 +39,7 @@ export class Navbar {
   cantidadCarrito = 2;
   totalCarrito = 0;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
@@ -64,4 +66,15 @@ export class Navbar {
       this.buscadorMovilAbierto = false;
     }
   }
+
+  private servicioUsuarios = inject(UsuariosService);
+  private servicioAuth = inject(AuthService);
+
+  usuarioActual = computed(() => this.servicioUsuarios.usuarioAutenticado());
+  
+  logout(): void {
+    this.servicioAuth.logout();
+    this.router.navigate(['/']);
+  }
+
 }

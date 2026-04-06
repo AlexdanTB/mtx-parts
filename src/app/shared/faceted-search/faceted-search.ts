@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { AuthService } from '../../service/auth-service';
 
 @Component({
   selector: 'app-faceted-search',
@@ -9,5 +10,12 @@ import { Component } from '@angular/core';
 export class FacetedSearch {
   categorias = ['Motor', 'Frenos', 'Llantas', 'Suspensión', 'Transmisión', 'Accesorios', 'Lubricantes'];
   marcas = ['Honda', 'Yamaha', 'Suzuki', 'KTM', 'Kawasaki', 'Shineray', 'Pirelli', 'Michelin', 'NGK'];
+
+  private authService = inject(AuthService);
+  logueado = this.authService.sesionIniciada;
+
+  mensaje() {
+    alert('Debes iniciar sesión para agregar al carrito');
+  }
 
 }
