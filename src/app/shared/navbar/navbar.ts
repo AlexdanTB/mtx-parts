@@ -14,7 +14,7 @@ export class Navbar {
 
   enlaces: Enlace[] = [
     { titulo: 'Inicio', link: '/' },
-    { titulo: 'Productos', link: '/productos' },
+    { titulo: 'Repuestos', link: '/repuestos' },
     { titulo: 'Nosotros', link: '/nosotros' },
     { titulo: 'Contacto', link: '/contacto' },
   ];

@@ -1,0 +1,20 @@
+@keyframes scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        /* Se mueve exactamente la mitad del ancho total (que es el tamaño de un set de marcas) */
+        transform: translateX(-50%);
+      }
+    }
+
+    .animate-scroll {
+      /* Ajusta los segundos (40s) para hacerlo más rápido o más lento */
+      animation: scroll 40s linear infinite;
+    }
+
+    /* 2. Máscara de desvanecimiento en los bordes (Efecto difuminado a los lados) */
+    .mask-image-fade {
+      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    }
