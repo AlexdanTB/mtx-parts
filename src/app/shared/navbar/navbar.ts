@@ -36,8 +36,6 @@ export class Navbar {
     email: 'estudiante@istqmet.edu.ec',
   };
 
-  cantidadCarrito = 2;
-  totalCarrito = 0;
 
   constructor(private router: Router) { }
 
