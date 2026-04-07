@@ -1,47 +1,47 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { Enlace } from '../../models/enlace';
+import { AuthService } from '../../service/auth-service';
+import { UsuariosService } from '../../service/usuarios-service';
 
 @Component({
   selector: 'app-navbar',
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, FormsModule, RouterLink, RouterLinkActive],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
 export class Navbar {
 
   enlaces: Enlace[] = [
-    { titulo: 'Inicio', link: '' },
-    {
-      titulo: 'Catálogo',
-      link: '/catalogo',
-      sub: [
-        { titulo: 'Motores',     link: '/catalogo/deportivas' },
-        { titulo: 'Estético', link: '/catalogo/naked' },
-        { titulo: 'Sistema Eléctrico ', link: '/catalogo/enduro' },
-        { titulo: 'Scooters',       link: '/catalogo/scooters' },
-        { titulo: 'Por Marca',      link: '/marcas' },
-      ]
-    },
+    { titulo: 'Inicio', link: '/' },
+    { titulo: 'Repuestos', link: '/repuestos' },
     { titulo: 'Nosotros', link: '/nosotros' },
     { titulo: 'Contacto', link: '/contacto' },
   ];
 
-  // Menú móvil principal
   isMenuOpen = false;
-
-  
   openSubMenuIndex: number | null = null;
-
-  // Menú de usuario (desktop hover)
   menuUsuarioAbierto = false;
+
+  // Buscador
+  busqueda = '';
+  buscadorMovilAbierto = false;
+
+  isLoggedIn = true;
+
+  usuario = {
+    nombre: 'Anderson',
+    email: 'estudiante@istqmet.edu.ec',
+  };
+
+
+  constructor(private router: Router) { }
 
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
-    if (!this.isMenuOpen) {
-      this.openSubMenuIndex = null; 
-    }
+    if (!this.isMenuOpen) this.openSubMenuIndex = null;
   }
 
   toggleSubMenu(index: number): void {
@@ -53,13 +53,26 @@ export class Navbar {
     this.openSubMenuIndex = null;
   }
 
-  isLoggedIn = true;
+  toggleBuscadorMovil(): void {
+    this.buscadorMovilAbierto = !this.buscadorMovilAbierto;
+  }
 
-  // Datos del usuario (en el futuro vendrán de un servicio/AuthService)
-  usuario = {
-    nombre: 'Anderson',
-    email: 'estudiante@istqmet.edu.ec',
-  };
+  buscar(): void {
+    const termino = this.busqueda.trim();
+    if (termino) {
+      this.router.navigate(['/buscar'], { queryParams: { q: termino } });
+      this.buscadorMovilAbierto = false;
+    }
+  }
 
-  cantidadCarrito = 2;
+  private servicioUsuarios = inject(UsuariosService);
+  private servicioAuth = inject(AuthService);
+
+  usuarioActual = computed(() => this.servicioUsuarios.usuarioAutenticado());
+  
+  logout(): void {
+    this.servicioAuth.logout();
+    this.router.navigate(['/']);
+  }
+
 }
