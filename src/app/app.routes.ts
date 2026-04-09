@@ -8,6 +8,9 @@ import { Register } from './shared/register/register';
 import { Login } from './shared/login/login';
 import { canActiveGuard } from './guards/can-active-guard';
 import { LoginRegisterPage } from './features/login-register-page/login-register-page';
+import { CarritoPage } from './features/carrito-page/carrito-page';
+import { MisPedidosPage } from './features/mis-pedidos-page/mis-pedidos-page';
+import { PerfilPage } from './features/perfil-page/perfil-page';
 
 export const routes: Routes = [
     { path: '', component: HomePage },
@@ -17,5 +20,8 @@ export const routes: Routes = [
     { path: 'registrarse', component: Register },
     { path: 'producto', component: DetalleProdPage },
     { path: 'logins', component: LoginRegisterPage, canActivate: [canActiveGuard] },
-    { path: 'login', component: Login, }
+    { path: 'login', component: Login },
+    { path: 'carrito', component: CarritoPage, canActivate: [canActiveGuard] },
+    { path: 'mis-pedidos', component: MisPedidosPage, canActivate: [canActiveGuard] },
+    { path: 'perfil', component: PerfilPage, canActivate: [canActiveGuard] }
 ];
