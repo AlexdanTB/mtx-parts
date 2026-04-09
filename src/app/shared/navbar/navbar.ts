@@ -5,6 +5,7 @@ import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { Enlace } from '../../models/enlace';
 import { AuthService } from '../../service/auth-service';
 import { UsuariosService } from '../../service/usuarios-service';
+import { CarritoService } from '../../service/carrito-service';
 
 @Component({
   selector: 'app-navbar',
@@ -25,7 +26,6 @@ export class Navbar {
   openSubMenuIndex: number | null = null;
   menuUsuarioAbierto = false;
 
-  // Buscador
   busqueda = '';
   buscadorMovilAbierto = false;
 
@@ -67,8 +67,10 @@ export class Navbar {
 
   private servicioUsuarios = inject(UsuariosService);
   private servicioAuth = inject(AuthService);
+  private carritoService = inject(CarritoService);
 
   usuarioActual = computed(() => this.servicioUsuarios.usuarioAutenticado());
+  cantidadCarrito = computed(() => this.carritoService.cantidadTotal());
   
   logout(): void {
     this.servicioAuth.logout();
