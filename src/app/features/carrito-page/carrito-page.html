@@ -1,0 +1,110 @@
+<div class="min-h-screen bg-gray-50 py-12">
+  <div class="container mx-auto px-4">
+    <h1 class="text-3xl font-bold text-charcoal-brown-800 mb-8">Carrito de Compras</h1>
+
+    @if (items().length === 0) {
+      <div class="bg-white rounded-2xl shadow-sm p-12 text-center">
+        <svg class="w-24 h-24 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+        <h2 class="text-xl font-semibold text-gray-700 mb-2">Tu carrito está vacío</h2>
+        <p class="text-gray-500 mb-6">Explora nuestros productos y agrega items a tu carrito</p>
+        <a href="/repuestos" class="inline-block bg-tiger-flame-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-tiger-flame-600 transition-colors">
+          Ver Productos
+        </a>
+      </div>
+    } @else {
+      <div class="grid lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+          <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+            <div class="p-6 border-b border-gray-100">
+              <div class="flex justify-between items-center">
+                <h2 class="text-lg font-semibold text-charcoal-brown-800">
+                  {{ items().length }} producto(s) en tu carrito
+                </h2>
+                <button (click)="vaciarCarrito()" class="text-red-500 hover:text-red-600 text-sm font-medium transition-colors">
+                  Vaciar carrito
+                </button>
+              </div>
+            </div>
+
+            <div class="divide-y divide-gray-100">
+              @for (item of items(); track item.idProducto) {
+                <div class="p-6 flex gap-4">
+                  <div class="w-24 h-24 bg-gray-100 rounded-xl flex-shrink-0 overflow-hidden">
+                    <img [src]="item.imagen" [alt]="item.nombre" class="w-full h-full object-cover">
+                  </div>
+                  
+                  <div class="flex-1 min-w-0">
+                    <h3 class="font-semibold text-charcoal-brown-800 truncate">{{ item.nombre }}</h3>
+                    <p class="text-sm text-gray-500">{{ item.marca }}</p>
+                    <p class="text-tiger-flame-500 font-bold mt-1">{{ formatPrice(item.precio) }}</p>
+                  </div>
+
+                  <div class="flex flex-col items-end justify-between">
+                    <button (click)="eliminarItem(item.idProducto)" class="text-gray-400 hover:text-red-500 transition-colors">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                      </svg>
+                    </button>
+
+                    <div class="flex items-center gap-2">
+                      <button (click)="actualizarCantidad(item.idProducto, $event)" 
+                              [attr.data-action]="'decrease'" 
+                              [attr.data-id]="item.idProducto"
+                              class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                              onclick="this.parentElement.querySelector('input').value = Math.max(1, parseInt(this.parentElement.querySelector('input').value) - 1); document.querySelector('app-carrito-page').__ngContext__[0].actualizarCantidad(this.getAttribute('data-id'), parseInt(this.parentElement.querySelector('input').value))">
+                        <span class="text-gray-600 font-bold">-</span>
+                      </button>
+                      <input type="number" 
+                             [value]="item.cantidad" 
+                             min="1"
+                             class="w-12 h-8 text-center border border-gray-200 rounded-lg text-sm"
+                             (change)="actualizarCantidad(item.idProducto, $event)">
+                      <button (click)="actualizarCantidad(item.idProducto, $event)"
+                              class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                              onclick="this.parentElement.querySelector('input').value = parseInt(this.parentElement.querySelector('input').value) + 1; document.querySelector('app-carrito-page').__ngContext__[0].actualizarCantidad(this.closest('.flex').querySelector('input').getAttribute('data-id') || this.getAttribute('data-id'), parseInt(this.parentElement.querySelector('input').value))">
+                        <span class="text-gray-600 font-bold">+</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-1">
+          <div class="bg-white rounded-2xl shadow-sm p-6 sticky top-8">
+            <h2 class="text-lg font-semibold text-charcoal-brown-800 mb-6">Resumen del Pedido</h2>
+            
+            <div class="space-y-4 mb-6">
+              <div class="flex justify-between text-gray-600">
+                <span>Subtotal ({{ cantidadTotal() }} items)</span>
+                <span>{{ formatPrice(totalCarrito()) }}</span>
+              </div>
+              <div class="flex justify-between text-gray-600">
+                <span>Envío</span>
+                <span class="text-green-600">Gratis</span>
+              </div>
+              <hr class="border-gray-100">
+              <div class="flex justify-between text-xl font-bold text-charcoal-brown-800">
+                <span>Total</span>
+                <span class="text-tiger-flame-500">{{ formatPrice(totalCarrito()) }}</span>
+              </div>
+            </div>
+
+            <button (click)="confirmarPedido()" 
+                    class="w-full bg-tiger-flame-500 text-white py-4 rounded-xl font-semibold hover:bg-tiger-flame-600 transition-colors">
+              Confirmar Pedido
+            </button>
+
+            <a href="/repuestos" class="block text-center mt-4 text-tiger-flame-500 hover:text-tiger-flame-600 font-medium">
+              Continuar Comprando
+            </a>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
