@@ -9,6 +9,6 @@ export const canMatchGuard: CanMatchFn = (route: Route, segments: UrlSegment[]) 
   if (authService.rolActual() === 'ROLE_ADMIN') {
     return true;
   }
-  router.navigate(['/dashboard']); 
+  router.navigate(['/']); 
   return false;
 };

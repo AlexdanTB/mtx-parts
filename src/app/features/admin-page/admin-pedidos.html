@@ -1,0 +1,100 @@
+<div class="min-h-screen bg-gray-50">
+  <div class="bg-tiger-flame-500 text-white py-8">
+    <div class="container mx-auto px-4">
+      <a routerLink="/admin" class="text-white/80 hover:text-white text-sm mb-2 block">← Panel Admin</a>
+      <h1 class="text-3xl font-black uppercase tracking-tight">Gestionar Pedidos</h1>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-4 py-8">
+    @if (mensaje()) {
+      <div class="mb-6 p-4 rounded-xl {{ mensaje()!.tipo === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+        {{ mensaje()!.texto }}
+      </div>
+    }
+
+    @if (loading()) {
+      <div class="flex justify-center items-center py-20">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-tiger-flame-500"></div>
+      </div>
+    } @else if (pedidos().length === 0) {
+      <div class="bg-white rounded-2xl shadow-sm p-12 text-center">
+        <p class="text-gray-500">No hay pedidos registrados</p>
+      </div>
+    } @else {
+      <div class="space-y-4">
+        @for (pedido of pedidos(); track pedido.id) {
+          <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+            <div class="p-6 cursor-pointer hover:bg-gray-50 transition-colors" (click)="toggleDetalle(pedido.id)">
+              <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-6">
+                  <div>
+                    <p class="text-xs text-gray-500 uppercase">Pedido #</p>
+                    <p class="font-bold text-gray-900">{{ pedido.id }}</p>
+                  </div>
+                  <div>
+                    <p class="text-xs text-gray-500 uppercase">Cliente</p>
+                    <p class="font-medium text-gray-900">{{ pedido.usuarioNombre }}</p>
+                  </div>
+                  <div>
+                    <p class="text-xs text-gray-500 uppercase">Fecha</p>
+                    <p class="font-medium text-gray-900">{{ formatDate(pedido.fecha) }}</p>
+                  </div>
+                  <div>
+                    <p class="text-xs text-gray-500 uppercase">Total</p>
+                    <p class="font-bold text-tiger-flame-500">{{ formatPrice(pedido.total) }}</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                  <select 
+                    [value]="pedido.estado"
+                    (change)="cambiarEstado(pedido, $any($event.target).value)"
+                    (click)="$event.stopPropagation()"
+                    class="px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-tiger-flame-500 outline-none">
+                    @for (estado of estados; track estado) {
+                      <option [value]="estado" [selected]="pedido.estado === estado">{{ estado }}</option>
+                    }
+                  </select>
+                  <svg class="w-5 h-5 text-gray-400 transition-transform {{ pedidoExpandido() === pedido.id ? 'rotate-180' : '' }}" 
+                       fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            @if (pedidoExpandido() === pedido.id) {
+              <div class="border-t border-gray-100 bg-gray-50 p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 class="font-bold text-gray-900 mb-2">Información del Cliente</h4>
+                    <p class="text-sm text-gray-600">Nombre: {{ pedido.usuarioNombre }}</p>
+                    <p class="text-sm text-gray-600">Email: {{ pedido.usuarioEmail }}</p>
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-gray-900 mb-2">Dirección de Envío</h4>
+                    <p class="text-sm text-gray-600">{{ pedido.direccionEnvio }}</p>
+                  </div>
+                </div>
+                <h4 class="font-bold text-gray-900 mt-6 mb-4">Detalle del Pedido</h4>
+                <div class="space-y-2">
+                  @for (detalle of pedido.detalles; track $index) {
+                    <div class="flex justify-between items-center bg-white p-4 rounded-xl">
+                      <div>
+                        <p class="font-medium text-gray-900">Producto ID: {{ detalle.productoId }}</p>
+                      </div>
+                      <div class="text-right">
+                        <p class="font-medium text-gray-900">Cantidad: {{ detalle.cantidad }}</p>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,110 @@
+<div class="min-h-screen bg-gray-50">
+  <div class="bg-tiger-flame-500 text-white py-8">
+    <div class="container mx-auto px-4">
+      <h1 class="text-3xl font-black uppercase tracking-tight">Panel de Administración</h1>
+      <p class="text-white/80 mt-1">Gestiona tus productos, pedidos y clientes</p>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-4 py-8">
+    @if (loading()) {
+      <div class="flex justify-center items-center py-20">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-tiger-flame-500"></div>
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-tiger-flame-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-500 font-medium">Total Productos</p>
+              <p class="text-3xl font-black text-gray-900 mt-1">{{ totalProductos() }}</p>
+            </div>
+            <div class="w-12 h-12 bg-tiger-flame-100 rounded-xl flex items-center justify-center">
+              <svg class="w-6 h-6 text-tiger-flame-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+              </svg>
+            </div>
+          </div>
+          <a routerLink="/admin/productos" class="text-tiger-flame-500 text-sm font-medium hover:underline mt-4 block">Ver todos →</a>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-blue-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-500 font-medium">Total Pedidos</p>
+              <p class="text-3xl font-black text-gray-900 mt-1">{{ totalPedidos() }}</p>
+            </div>
+            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+              <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+              </svg>
+            </div>
+          </div>
+          <a routerLink="/admin/pedidos" class="text-blue-500 text-sm font-medium hover:underline mt-4 block">Ver todos →</a>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-yellow-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-500 font-medium">Pedidos Pendientes</p>
+              <p class="text-3xl font-black text-gray-900 mt-1">{{ pedidosPendientes() }}</p>
+            </div>
+            <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
+              <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+          </div>
+          <a routerLink="/admin/pedidos" class="text-yellow-500 text-sm font-medium hover:underline mt-4 block">Revisar →</a>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm p-6 border-l-4 border-green-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm text-gray-500 font-medium">Total Usuarios</p>
+              <p class="text-3xl font-black text-gray-900 mt-1">{{ totalUsuarios() }}</p>
+            </div>
+            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+              <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+              </svg>
+            </div>
+          </div>
+          <a routerLink="/admin/usuarios" class="text-green-500 text-sm font-medium hover:underline mt-4 block">Ver todos →</a>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-6">
+        <a routerLink="/admin/productos" class="bg-white rounded-2xl shadow-sm p-8 hover:shadow-md transition-shadow group">
+          <div class="w-14 h-14 bg-tiger-flame-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-tiger-flame-500 transition-colors">
+            <svg class="w-7 h-7 text-tiger-flame-500 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900">Gestionar Productos</h3>
+          <p class="text-gray-500 mt-2">Agregar, editar o eliminar productos del catálogo</p>
+        </a>
+
+        <a routerLink="/admin/pedidos" class="bg-white rounded-2xl shadow-sm p-8 hover:shadow-md transition-shadow group">
+          <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-blue-500 transition-colors">
+            <svg class="w-7 h-7 text-blue-500 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900">Gestionar Pedidos</h3>
+          <p class="text-gray-500 mt-2">Ver y actualizar el estado de los pedidos</p>
+        </a>
+
+        <a routerLink="/admin/usuarios" class="bg-white rounded-2xl shadow-sm p-8 hover:shadow-md transition-shadow group">
+          <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-green-500 transition-colors">
+            <svg class="w-7 h-7 text-green-500 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900">Gestionar Usuarios</h3>
+          <p class="text-gray-500 mt-2">Ver y administrar cuentas de usuarios</p>
+        </a>
+      </div>
+    }
+  </div>
+</div>
