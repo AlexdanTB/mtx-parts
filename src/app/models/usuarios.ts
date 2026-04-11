@@ -1,8 +1,8 @@
 export interface Usuarios {
-  id?: string;
-  nombre: string;
-  correo: string;
-  contrasena: string;
-  foto: string;
-  rol: 'ROLE_ADMIN' | 'ROLE_USUARIO'; 
+  id?: number;
+  nombreCompleto: string;
+  email: string;
+  telefono?: string;
+  direccion?: string;
+  rol: 'ROLE_ADMIN' | 'ROLE_CLIENTE';
 }

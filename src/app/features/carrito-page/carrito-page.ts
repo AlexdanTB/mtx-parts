@@ -1,14 +1,15 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CarritoService } from '../../service/carrito-service';
 import { PedidosService } from '../../service/pedidos-service';
 import { AuthService } from '../../service/auth-service';
 import { UsuariosService } from '../../service/usuarios-service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-carrito-page',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './carrito-page.html',
   styleUrl: './carrito-page.css',
 })
@@ -23,22 +24,20 @@ export class CarritoPage {
   cantidadTotal = this.carritoService.cantidadTotal;
   totalCarrito = this.carritoService.totalCarrito;
 
-  actualizarCantidad(idProducto: string, event: Event): void {
+  direccionEnvio = signal('');
+
+  actualizarCantidad(idProducto: number, event: Event): void {
     const input = event.target as HTMLInputElement;
     const cantidad = parseInt(input.value, 10);
-    this.carritoService.actualizarCantidad(idProducto, cantidad);
+    this.carritoService.actualizarCantidad(String(idProducto), cantidad);
   }
 
-  eliminarItem(idProducto: string): void {
-    this.carritoService.eliminarItem(idProducto);
+  eliminarItem(idProducto: number): void {
+    this.carritoService.eliminarItem(String(idProducto));
   }
 
   vaciarCarrito(): void {
     this.carritoService.vaciarCarrito();
-  }
-
-  generarNumeroPedido(): string {
-    return 'PED-' + Date.now().toString(36).toUpperCase();
   }
 
   confirmarPedido(): void {
@@ -48,32 +47,31 @@ export class CarritoPage {
       return;
     }
 
-    const usuario = this.usuariosService.usuarioAutenticado();
-    if (!usuario) {
-      alert('No se pudo obtener la información del usuario');
+    if (!this.direccionEnvio()) {
+      alert('Por favor ingresa la dirección de envío');
       return;
     }
 
+    const detalles = this.items().map(item => ({
+      productoId: Number(item.idProducto),
+      cantidad: item.cantidad
+    }));
+
     const pedido = {
-      idUsuario: usuario.id || '',
-      nombreUsuario: usuario.nombre,
-      correoUsuario: usuario.correo,
-      items: this.items(),
-      total: this.totalCarrito(),
-      estado: 'pendiente' as const,
-      fecha: new Date().toISOString(),
-      direccion: '',
-      telefono: ''
+      detalles,
+      direccionEnvio: this.direccionEnvio()
     };
 
-    this.pedidosService.postPedido(pedido).subscribe({
+    this.pedidosService.crearPedido(pedido).subscribe({
       next: () => {
         this.carritoService.vaciarCarrito();
+        this.direccionEnvio.set('');
         alert('¡Pedido realizado con éxito!');
         this.router.navigate(['/mis-pedidos']);
       },
-      error: () => {
+      error: (err) => {
         alert('Error al procesar el pedido. Intenta nuevamente.');
+        console.error(err);
       }
     });
   }

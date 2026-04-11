@@ -29,15 +29,15 @@ export class Navbar {
   busqueda = '';
   buscadorMovilAbierto = false;
 
-  isLoggedIn = true;
+  private servicioUsuarios = inject(UsuariosService);
+  private servicioAuth = inject(AuthService);
+  private carritoService = inject(CarritoService);
+  private router = inject(Router);
 
-  usuario = {
-    nombre: 'Anderson',
-    email: 'estudiante@istqmet.edu.ec',
-  };
-
-
-  constructor(private router: Router) { }
+  sesionIniciada = computed(() => this.servicioAuth.sesionIniciada());
+  rolActual = computed(() => this.servicioAuth.rolActual());
+  usuarioActual = computed(() => this.servicioUsuarios.usuarioAutenticado());
+  cantidadCarrito = computed(() => this.carritoService.cantidadTotal());
 
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
@@ -60,18 +60,11 @@ export class Navbar {
   buscar(): void {
     const termino = this.busqueda.trim();
     if (termino) {
-      this.router.navigate(['/buscar'], { queryParams: { q: termino } });
+      this.router.navigate(['/repuestos'], { queryParams: { nombre: termino } });
       this.buscadorMovilAbierto = false;
     }
   }
 
-  private servicioUsuarios = inject(UsuariosService);
-  private servicioAuth = inject(AuthService);
-  private carritoService = inject(CarritoService);
-
-  usuarioActual = computed(() => this.servicioUsuarios.usuarioAutenticado());
-  cantidadCarrito = computed(() => this.carritoService.cantidadTotal());
-  
   logout(): void {
     this.servicioAuth.logout();
     this.router.navigate(['/']);
