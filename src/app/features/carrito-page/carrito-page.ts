@@ -56,8 +56,8 @@ export class CarritoPage {
 
     const pedido = {
       idUsuario: usuario.id || '',
-      nombreUsuario: usuario.nombre,
-      correoUsuario: usuario.correo,
+      nombreUsuario: usuario.name,
+      emailUsuario: usuario.email,
       items: this.items(),
       total: this.totalCarrito(),
       estado: 'pendiente' as const,

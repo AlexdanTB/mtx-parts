@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { UsuariosService } from '../../service/usuarios-service';
   styleUrl: './perfil-page.css',
 })
 export class PerfilPage {
+
   private authService = inject(AuthService);
   private usuariosService = inject(UsuariosService);
   private router = inject(Router);
@@ -21,10 +22,12 @@ export class PerfilPage {
   mensaje = signal<{ tipo: string; texto: string } | null>(null);
 
   nombre = signal('');
-  correo = signal('');
+  email = signal('');
   telefono = signal('');
   direccion = signal('');
   foto = signal('');
+
+  usuarioActual = computed(() => this.usuariosService.usuarioAutenticado());
 
   ngOnInit(): void {
     if (!this.authService.sesionIniciada()) {
@@ -34,9 +37,11 @@ export class PerfilPage {
 
     const usuario = this.usuariosService.usuarioAutenticado();
     if (usuario) {
-      this.nombre.set(usuario.nombre);
-      this.correo.set(usuario.correo);
-      this.foto.set(usuario.foto || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(usuario.nombre) + '&background=fe4d01&color=fff');
+      this.nombre.set(usuario.name);
+      this.email.set(usuario.email);
+      this.telefono.set(usuario.phone);
+      this.direccion.set(usuario.address || '');
+      this.foto.set(usuario.imagen_url || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(usuario.name) + '&background=fe4d01&color=fff');
     }
   }
 
@@ -56,8 +61,11 @@ export class PerfilPage {
 
     const usuarioActualizado = {
       ...usuarioActual,
-      nombre: this.nombre(),
-      correo: this.correo()
+      name: this.nombre(),
+      email: this.email(),
+      imagen_url: this.foto(),
+      phone: this.telefono(),
+      address: this.direccion()
     };
 
     this.usuariosService.putUsuario(usuarioActual.id, usuarioActualizado).subscribe({

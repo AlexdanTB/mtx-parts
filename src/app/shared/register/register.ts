@@ -18,16 +18,18 @@ private servicioUsuarios = inject(UsuariosService);
   listaUsuarios = signal<Usuarios[]>([]);
 
   //Objeto para vincular con el formulario
-  nuevoUsuario: Usuarios = {
-    nombre: '',
+  guardarUsuario: Usuarios = {
+    name: '',
     email: '',
     password: '',
-    foto: '',
+    imagen_url: '',
+    phone: '',
+    address: '',
     rol: 'ROLE_USUARIO'
   }
 
   registrarUsuario() {
-    this.servicioUsuarios.postUsuario(this.nuevoUsuario).subscribe(() => {
+    this.servicioUsuarios.postUsuario(this.guardarUsuario).subscribe(() => {
       alert('Usuario registrado correctamente');
       this.router.navigate(['/login'])
       this.limpiarFormulario();
@@ -40,11 +42,13 @@ private servicioUsuarios = inject(UsuariosService);
 
 
   limpiarFormulario() {
-    this.nuevoUsuario = {
-      nombre: '',
+    this.guardarUsuario = {
+      name: '',
       email: '',
       password: '',
-      foto: '',
+      imagen_url: '',
+      phone: '',
+      address: '',
       rol: 'ROLE_USUARIO'
     }
   }

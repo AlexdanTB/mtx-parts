@@ -10,7 +10,7 @@ import { map } from 'rxjs/internal/operators/map';
 export class UsuariosService {
 
    private http = inject(HttpClient);
- private API_USUARIOS = 'http://localhost:8080/usuarios';  
+ private API_USUARIOS = 'http://localhost:8080/usuarios/actualizarUsuario';  
   
   usuarioAutenticado = signal<Usuarios | null>(
     JSON.parse(localStorage.getItem('usuario') || 'null')
@@ -19,7 +19,6 @@ export class UsuariosService {
   setUsuario(usuario: Usuarios | null): void {
     this.usuarioAutenticado.set(usuario);
   }
-
 
   getUsuarios(): Observable<Usuarios[]> {
     /*return this.http.get<{ [key: string]: Usuarios }>(

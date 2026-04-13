@@ -10,8 +10,9 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class AuthService {
-  /*
+  
   private servicioUsuario = inject(UsuariosService);
+  /*
   private router = inject(Router);
   private http = inject(HttpClient);
   private API_LOGIN = 'http://localhost:8080/login';
@@ -56,7 +57,7 @@ export class AuthService {
           localStorage.setItem('rol', usuarioCoincide.rol);
           this.rolActual.set(usuarioCoincide.rol);
           this.sesionIniciada.set(true);
-
+          this.servicioUsuario.setUsuario(usuarioCoincide);
           return true;
         }
         return false;
@@ -69,8 +70,11 @@ export class AuthService {
     localStorage.removeItem('sesion');
     localStorage.removeItem('rol');
     localStorage.removeItem('usuario');
+
     this.sesionIniciada.set(false);
     this.rolActual.set(null);
+    
+    this.servicioUsuario.setUsuario(null);
 
   }
 }
