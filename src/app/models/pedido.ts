@@ -1,14 +1,25 @@
 import { CarritoItem } from "./carrito-item";
 
 export interface Pedido {
-  id?: string;
-  idUsuario: string;
-  nombreUsuario: string;
-  correoUsuario: string;
-  items: CarritoItem[];
-  total: number;
-  estado: 'pendiente' | 'procesando' | 'enviado' | 'entregado' | 'cancelado';
+  id?: number;
+  detalles: { productoId: number; cantidad: number }[];
+  direccionEnvio: string;
+  estado?: 'PENDIENTE' | 'PAGADO' | 'ENTREGADO' | 'ANULADO';
+  fecha?: string;
+  total?: number;
+  usuarioId?: number;
+  usuarioNombre?: string;
+  usuarioEmail?: string;
+}
+
+export interface PedidoResponse {
+  id: number;
+  detalles: { productoId: number; cantidad: number }[];
+  direccionEnvio: string;
+  estado: string;
   fecha: string;
-  direccion: string;
-  telefono: string;
+  total: number;
+  usuarioId: number;
+  usuarioNombre: string;
+  usuarioEmail: string;
 }

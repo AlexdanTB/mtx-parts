@@ -42,30 +42,18 @@
                   </div>
 
                   <div class="flex flex-col items-end justify-between">
-                    <button (click)="eliminarItem(item.idProducto)" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <button (click)="eliminarItem(+item.idProducto)" class="text-gray-400 hover:text-red-500 transition-colors">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                       </svg>
                     </button>
 
                     <div class="flex items-center gap-2">
-                      <button (click)="actualizarCantidad(item.idProducto, $event)" 
-                              [attr.data-action]="'decrease'" 
-                              [attr.data-id]="item.idProducto"
-                              class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-                              onclick="this.parentElement.querySelector('input').value = Math.max(1, parseInt(this.parentElement.querySelector('input').value) - 1); document.querySelector('app-carrito-page').__ngContext__[0].actualizarCantidad(this.getAttribute('data-id'), parseInt(this.parentElement.querySelector('input').value))">
-                        <span class="text-gray-600 font-bold">-</span>
-                      </button>
                       <input type="number" 
                              [value]="item.cantidad" 
                              min="1"
-                             class="w-12 h-8 text-center border border-gray-200 rounded-lg text-sm"
-                             (change)="actualizarCantidad(item.idProducto, $event)">
-                      <button (click)="actualizarCantidad(item.idProducto, $event)"
-                              class="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-                              onclick="this.parentElement.querySelector('input').value = parseInt(this.parentElement.querySelector('input').value) + 1; document.querySelector('app-carrito-page').__ngContext__[0].actualizarCantidad(this.closest('.flex').querySelector('input').getAttribute('data-id') || this.getAttribute('data-id'), parseInt(this.parentElement.querySelector('input').value))">
-                        <span class="text-gray-600 font-bold">+</span>
-                      </button>
+                             class="w-16 h-10 text-center border border-gray-200 rounded-lg text-sm"
+                             (change)="actualizarCantidad(+item.idProducto, $event)">
                     </div>
                   </div>
                 </div>
@@ -77,6 +65,15 @@
         <div class="lg:col-span-1">
           <div class="bg-white rounded-2xl shadow-sm p-6 sticky top-8">
             <h2 class="text-lg font-semibold text-charcoal-brown-800 mb-6">Resumen del Pedido</h2>
+            
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Dirección de Envío</label>
+              <textarea 
+                [(ngModel)]="direccionEnvio"
+                rows="3"
+                class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-tiger-flame-500 focus:border-transparent outline-none resize-none"
+                placeholder="Ingresa tu dirección de envío completa..."></textarea>
+            </div>
             
             <div class="space-y-4 mb-6">
               <div class="flex justify-between text-gray-600">

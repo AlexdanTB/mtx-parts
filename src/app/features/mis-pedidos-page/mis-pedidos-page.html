@@ -26,7 +26,7 @@
                 <div class="flex flex-wrap items-center gap-6">
                   <div>
                     <p class="text-sm text-gray-500">Número de Pedido</p>
-                    <p class="font-semibold text-charcoal-brown-800">#{{ pedido.id?.slice(0, 8).toUpperCase() }}</p>
+                    <p class="font-semibold text-charcoal-brown-800">#{{ pedido.id }}</p>
                   </div>
                   <div>
                     <p class="text-sm text-gray-500">Fecha</p>
@@ -38,13 +38,13 @@
                   </div>
                   <div>
                     <p class="text-sm text-gray-500">Items</p>
-                    <p class="font-medium text-charcoal-brown-800">{{ pedido.items.length }} producto(s)</p>
+                    <p class="font-medium text-charcoal-brown-800">{{ pedido.detalles?.length || 0 }} producto(s)</p>
                   </div>
                 </div>
 
                 <div class="flex items-center gap-4">
                   <span class="px-3 py-1 rounded-full text-sm font-medium {{ getEstadoClase(pedido.estado) }}">
-                    {{ pedido.estado | titlecase }}
+                    {{ pedido.estado }}
                   </span>
                   <svg class="w-5 h-5 text-gray-400 transition-transform {{ pedidoExpandido === pedido.id ? 'rotate-180' : '' }}" 
                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,20 +56,25 @@
 
             @if (pedidoExpandido === pedido.id) {
               <div class="border-t border-gray-100 bg-gray-50 p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <p class="text-sm text-gray-500">Dirección de Envío</p>
+                    <p class="font-medium text-charcoal-brown-800">{{ pedido.direccionEnvio }}</p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Cliente</p>
+                    <p class="font-medium text-charcoal-brown-800">{{ pedido.usuarioNombre }}</p>
+                  </div>
+                </div>
                 <h3 class="font-semibold text-charcoal-brown-800 mb-4">Detalle del Pedido</h3>
-                <div class="grid gap-4">
-                  @for (item of pedido.items; track item.idProducto) {
-                    <div class="flex items-center gap-4 bg-white p-4 rounded-xl">
-                      <div class="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                        <img [src]="item.imagen" [alt]="item.nombre" class="w-full h-full object-cover">
-                      </div>
-                      <div class="flex-1 min-w-0">
-                        <p class="font-medium text-charcoal-brown-800 truncate">{{ item.nombre }}</p>
-                        <p class="text-sm text-gray-500">{{ item.marca }}</p>
+                <div class="space-y-2">
+                  @for (detalle of pedido.detalles; track $index) {
+                    <div class="flex items-center justify-between bg-white p-4 rounded-xl">
+                      <div>
+                        <p class="font-medium text-charcoal-brown-800">Producto ID: {{ detalle.productoId }}</p>
                       </div>
                       <div class="text-right">
-                        <p class="font-medium text-charcoal-brown-800">{{ formatPrice(item.precio) }} x {{ item.cantidad }}</p>
-                        <p class="text-sm text-gray-500">Subtotal: {{ formatPrice(item.precio * item.cantidad) }}</p>
+                        <p class="font-medium text-charcoal-brown-800">Cantidad: {{ detalle.cantidad }}</p>
                       </div>
                     </div>
                   }

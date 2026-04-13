@@ -1,43 +1,66 @@
-import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Pedido } from '../models/pedido';
+import { inject, Injectable, signal } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { Pedido, PedidoResponse } from '../models/pedido';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PedidosService {
-  private readonly API_URL = 'https://projectmtx-68218-default-rtdb.firebaseio.com/pedidos';
+  private readonly API_URL = 'http://localhost:8080/pedidos';
   private http = inject(HttpClient);
 
-  pedidos = signal<Pedido[]>([]);
+  pedidos = signal<PedidoResponse[]>([]);
 
-  getPedidos(): Observable<Pedido[]> {
-    return this.http.get<Pedido[]>(`${this.API_URL}.json`);
+  getPedidos(): Observable<PedidoResponse[]> {
+    return this.http.get<PedidoResponse[]>(this.API_URL).pipe(
+      map((data: PedidoResponse[]) => {
+        this.pedidos.set(data);
+        return data;
+      }),
+      catchError(this.handleError)
+    );
   }
 
-  getPedidosPorUsuario(idUsuario: string): Observable<Pedido[]> {
-    return new Observable(observer => {
-      this.getPedidos().subscribe({
-        next: (pedidos) => {
-          const pedidosUsuario = pedidos.filter(p => p.idUsuario === idUsuario);
-          this.pedidos.set(pedidosUsuario);
-          observer.next(pedidosUsuario);
-        },
-        error: (err) => observer.error(err)
-      });
-    });
+  getPedidoPorId(id: number): Observable<PedidoResponse> {
+    return this.http.get<PedidoResponse>(`${this.API_URL}/${id}`).pipe(
+      catchError(this.handleError)
+    );
   }
 
-  postPedido(pedido: Pedido): Observable<{ name: string }> {
-    return this.http.post<{ name: string }>(`${this.API_URL}.json`, pedido);
+  getPedidosPorStatus(status: string): Observable<PedidoResponse[]> {
+    return this.http.get<PedidoResponse[]>(`${this.API_URL}/status/${status}`).pipe(
+      catchError(this.handleError)
+    );
   }
 
-  putPedido(id: string, pedido: Pedido): Observable<Pedido> {
-    return this.http.put<Pedido>(`${this.API_URL}/${id}.json`, pedido);
+  crearPedido(pedido: {
+    detalles: { productoId: number; cantidad: number }[];
+    direccionEnvio: string;
+  }): Observable<PedidoResponse> {
+    return this.http.post<PedidoResponse>(this.API_URL, pedido).pipe(
+      catchError(this.handleError)
+    );
   }
 
-  deletePedido(id: string): Observable<null> {
-    return this.http.delete<null>(`${this.API_URL}/${id}.json`);
+  actualizarEstadoPedido(id: number, estado: string): Observable<PedidoResponse> {
+    return this.http.put<PedidoResponse>(`${this.API_URL}/${id}/status`, null, {
+      params: { status: estado }
+    }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    let mensaje = 'Error desconocido';
+    if (error.error?.message) {
+      mensaje = error.error.message;
+    } else if (error.status === 401) {
+      mensaje = 'No autorizado';
+    } else if (error.status === 404) {
+      mensaje = 'Pedido no encontrado';
+    }
+    return throwError(() => new Error(mensaje));
   }
 }

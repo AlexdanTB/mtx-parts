@@ -1,0 +1,57 @@
+<div class="min-h-screen bg-gray-50">
+  <div class="bg-tiger-flame-500 text-white py-8">
+    <div class="container mx-auto px-4">
+      <a routerLink="/admin" class="text-white/80 hover:text-white text-sm mb-2 block">← Panel Admin</a>
+      <h1 class="text-3xl font-black uppercase tracking-tight">Gestionar Usuarios</h1>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-4 py-8">
+    @if (loading()) {
+      <div class="flex justify-center items-center py-20">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-tiger-flame-500"></div>
+      </div>
+    } @else if (usuarios().length === 0) {
+      <div class="bg-white rounded-2xl shadow-sm p-12 text-center">
+        <p class="text-gray-500">No hay usuarios registrados</p>
+      </div>
+    } @else {
+      <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-4 text-left text-xs font-bold uppercase text-gray-500">Usuario</th>
+                <th class="px-6 py-4 text-left text-xs font-bold uppercase text-gray-500">Email</th>
+                <th class="px-6 py-4 text-left text-xs font-bold uppercase text-gray-500">Teléfono</th>
+                <th class="px-6 py-4 text-left text-xs font-bold uppercase text-gray-500">Dirección</th>
+                <th class="px-6 py-4 text-left text-xs font-bold uppercase text-gray-500">Rol</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              @for (usuario of usuarios(); track usuario.id) {
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                      <img [src]="'https://ui-avatars.com/api/?name=' + (usuario.nombreCompleto || 'U') + '&background=fe4d01&color=fff'" 
+                           class="w-10 h-10 rounded-full">
+                      <span class="font-semibold text-gray-900">{{ usuario.nombreCompleto }}</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-gray-600">{{ usuario.email }}</td>
+                  <td class="px-6 py-4 text-gray-600">{{ usuario.telefono || '-' }}</td>
+                  <td class="px-6 py-4 text-gray-600 max-w-xs truncate">{{ usuario.direccion || '-' }}</td>
+                  <td class="px-6 py-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-medium {{ getRolClase(usuario.rol) }}">
+                      {{ usuario.rol }}
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+  </div>
+</div>

@@ -1,7 +1,9 @@
 export interface Producto {
-    nombre: string,
-    descripcion: string,
-    disponible: boolean,
-    marca: string,
-    precio: number
+  id?: number;
+  sku: string;
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  stock: number;
+  imagenUrl?: string;
 }
