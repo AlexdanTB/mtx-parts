@@ -11,6 +11,7 @@ import { LoginRegisterPage } from './features/login-register-page/login-register
 import { CarritoPage } from './features/carrito-page/carrito-page';
 import { MisPedidosPage } from './features/mis-pedidos-page/mis-pedidos-page';
 import { PerfilPage } from './features/perfil-page/perfil-page';
+import { Dashboard } from './features/dashboard/dashboard';
 
 export const routes: Routes = [
     { path: '', component: HomePage },
@@ -23,5 +24,6 @@ export const routes: Routes = [
     { path: 'login', component: Login },
     { path: 'carrito', component: CarritoPage, canActivate: [canActiveGuard] },
     { path: 'mis-pedidos', component: MisPedidosPage, canActivate: [canActiveGuard] },
-    { path: 'perfil', component: PerfilPage, canActivate: [canActiveGuard] }
+    { path: 'perfil', component: PerfilPage, canActivate: [canActiveGuard] },
+    { path: 'dashboard', component: Dashboard, canActivate: [canActiveGuard] }
 ];
