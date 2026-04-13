@@ -20,8 +20,8 @@ private servicioUsuarios = inject(UsuariosService);
   //Objeto para vincular con el formulario
   nuevoUsuario: Usuarios = {
     nombre: '',
-    correo: '',
-    contrasena: '',
+    email: '',
+    password: '',
     foto: '',
     rol: 'ROLE_USUARIO'
   }
@@ -42,8 +42,8 @@ private servicioUsuarios = inject(UsuariosService);
   limpiarFormulario() {
     this.nuevoUsuario = {
       nombre: '',
-      correo: '',
-      contrasena: '',
+      email: '',
+      password: '',
       foto: '',
       rol: 'ROLE_USUARIO'
     }

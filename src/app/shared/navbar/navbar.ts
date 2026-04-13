@@ -29,13 +29,6 @@ export class Navbar {
   busqueda = '';
   buscadorMovilAbierto = false;
 
-  isLoggedIn = true;
-
-  usuario = {
-    nombre: 'Anderson',
-    email: 'estudiante@istqmet.edu.ec',
-  };
-
 
   constructor(private router: Router) { }
 

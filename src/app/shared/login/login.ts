@@ -13,15 +13,15 @@ import { FormsModule } from '@angular/forms';
 export class Login {
 
   
-  correo: string = '';
-  contrasena: string = '';
+  email: string = '';
+  password: string = '';
   mostrarPassword: boolean = false; 
 
   private servicioAuth = inject(AuthService);
   private router = inject(Router);
 
   iniciarSesion() {
-    this.servicioAuth.login(this.correo,this.contrasena).subscribe(success =>{
+    this.servicioAuth.login(this.email, this.password).subscribe(success => {
       if(success){
         alert('Bienvenido al Sistema');
         this.router.navigate(['/']);
