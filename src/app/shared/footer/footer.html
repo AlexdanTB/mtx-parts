@@ -13,7 +13,7 @@
                     <ul class="text-gray-600 dark:text-gray-300">
                         @for (enlace of enlaces; track $index) {        
                         <li class="mb-4">
-                            <a href="#" class="hover:underline">{{enlace.titulo}}</a>
+                            <a routerLink="{{enlace.link}}" class="hover:underline">{{enlace.titulo}}</a>
                         </li>
                     }
                     </ul>
