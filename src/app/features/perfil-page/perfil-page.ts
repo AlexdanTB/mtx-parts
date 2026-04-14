@@ -88,5 +88,6 @@ export class PerfilPage {
     if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
       this.authService.logout();
     }
+    this.router.navigate(['/']);
   }
 }

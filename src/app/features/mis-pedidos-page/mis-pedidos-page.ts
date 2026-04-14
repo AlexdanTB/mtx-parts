@@ -1,13 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { PedidosService } from '../../service/pedidos-service';
 import { AuthService } from '../../service/auth-service';
 import { UsuariosService } from '../../service/usuarios-service';
 
 @Component({
   selector: 'app-mis-pedidos-page',
-  imports: [CommonModule],
+  imports: [CommonModule,RouterLink],
   templateUrl: './mis-pedidos-page.html',
   styleUrl: './mis-pedidos-page.css',
 })
