@@ -25,15 +25,15 @@ export class CarritoPage {
   cantidadTotal = this.carritoService.cantidadTotal;
   totalCarrito = this.carritoService.totalCarrito;
 
- actualizarCantidad(idProducto: string, nuevaCantidad: number): void {
-    if (nuevaCantidad < 1) return; 
+  actualizarCantidad(idProducto: string, nuevaCantidad: number): void {
+    if (nuevaCantidad < 1) return;
     this.carritoService.actualizarCantidad(idProducto, nuevaCantidad);
   }
 
   cambiarCantidadDesdeInput(idProducto: string, event: Event): void {
     const input = event.target as HTMLInputElement;
     const cantidad = parseInt(input.value, 10);
-    
+
     if (!isNaN(cantidad) && cantidad >= 1) {
       this.actualizarCantidad(idProducto, cantidad);
     }
@@ -51,29 +51,39 @@ export class CarritoPage {
     return 'PED-' + Date.now().toString(36).toUpperCase();
   }
 
- confirmarPedido(): void {
+  confirmarPedido(): void {
   const usuario = this.usuariosService.usuarioAutenticado();
-  if (!usuario || !usuario.id) return;
+  if (!usuario || !usuario.id) {
+    alert('Debes iniciar sesión para realizar un pedido');
+    return;
+  }
 
-  const datosParaBackend = {
-    idUsuario: Number(usuario.id), 
-    direccionEnvio: usuario.address || 'Quito', 
+  if (this.items().length === 0) {
+    alert('El carrito está vacío');
+    return;
+  }
+
+  const body = {
+    usuarioId: Number(usuario.id),
+    direccionEnvio: usuario.address || 'Quito',
     detalles: this.items().map(item => ({
-      productoId: Number(item.idProducto), 
+      productoId: Number(item.idProducto),
       cantidad: Number(item.cantidad)
     }))
   };
 
-  console.log('Datos enviados al backend:', datosParaBackend);
-
-  this.pedidosService.postPedido(datosParaBackend as any).subscribe({
-    next: () => {
+  this.pedidosService.postPedido(body).subscribe({
+    next: (res) => {
       this.carritoService.vaciarCarrito();
       alert('¡Pedido realizado con éxito!');
       this.router.navigate(['/mis-pedidos']);
     },
     error: (err) => {
-      console.error('Error 400 - Detalles del servidor:', err);
+      // Muestra el mensaje real del backend
+      const mensaje = err.error?.message
+        || 'Error al procesar el pedido. Intenta de nuevo.';
+      alert(mensaje);
+      console.error('Error pedido:', err);
     }
   });
 }

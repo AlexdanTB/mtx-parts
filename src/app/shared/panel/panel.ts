@@ -33,16 +33,9 @@ export class Panel implements OnInit {
   usuarios = signal<Usuarios[]>([]);
 
   ngOnInit(): void {
-    this.servicioProducto.getProducto().subscribe(
-      (respuesta: Producto[] | { data: Producto[] }) => {
-        const data = Array.isArray((respuesta as { data?: Producto[] }).data)
-          ? (respuesta as { data: Producto[] }).data
-          : Array.isArray(respuesta)
-            ? respuesta
-            : [];
-        this.repuestos.set(data);
-      }
-    );
+    this.cargarCatalogo();
+
+    // Cargamos usuarios (puedes hacer lo mismo con usuarios si quieres quitar el any)
     this.servicioUsuarios.getUsuarios().subscribe(
       (data: Usuarios[]) => this.usuarios.set(Array.isArray(data) ? data : [])
     );
@@ -105,18 +98,37 @@ export class Panel implements OnInit {
     this.repuestoEditando = null;
   }
 
+  cargarCatalogo(): void {
+    this.servicioProducto.getProducto().subscribe({
+      next: (respuesta) => { 
+        // Verificamos la estructura que manda tu Spring Boot
+        if (respuesta && respuesta.data) {
+          this.repuestos.set(respuesta.data);
+        } else if (Array.isArray(respuesta)) {
+          this.repuestos.set(respuesta);
+        }
+      },
+      error: (err) => console.error('Error al cargar el catálogo:', err)
+    });
+  }
+
   guardarRepuesto(): void {
     if (this.repuestoEditando?.id) {
-      this.servicioProducto.updateProducto(this.repuestoEditando.id, this.formRepuesto).subscribe(() => {
-        this.repuestos.update(lista =>
-          lista.map(p => p.id === this.repuestoEditando!.id ? { ...this.formRepuesto, id: this.repuestoEditando!.id } : p)
-        );
-        this.cerrarModalRepuesto();
+      this.servicioProducto.putProducto(this.repuestoEditando.id, this.formRepuesto).subscribe({
+        next: () => {
+          this.cargarCatalogo(); 
+          this.cerrarModalRepuesto();
+        },
+        error: (err) => console.error('Error al actualizar:', err)
       });
     } else {
-      this.servicioProducto.addProducto(this.formRepuesto).subscribe(nuevo => {
-        this.repuestos.update(lista => [...lista, nuevo]);
-        this.cerrarModalRepuesto();
+      this.servicioProducto.postProducto(this.formRepuesto).subscribe({
+        next: (respuesta) => {
+          this.cargarCatalogo(); 
+          this.cerrarModalRepuesto();
+          alert('Repuesto creado con éxito');
+        },
+        error: (err) => console.error('Error al crear:', err)
       });
     }
   }

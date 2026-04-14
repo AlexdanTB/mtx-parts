@@ -12,6 +12,7 @@ import { UsuariosService } from '../../service/usuarios-service';
   styleUrl: './mis-pedidos-page.css',
 })
 export class MisPedidosPage implements OnInit {
+  
   private pedidosService = inject(PedidosService);
   private authService = inject(AuthService);
   private usuariosService = inject(UsuariosService);
@@ -29,17 +30,13 @@ export class MisPedidosPage implements OnInit {
 
     const usuario = this.usuariosService.usuarioAutenticado();
     if (usuario?.id) {
-      this.pedidosService.getPedidosPorUsuario(usuario.id).subscribe({
+      this.pedidosService.getPedidosPorUsuario(Number(usuario.id)).subscribe({
         next: (respuesta: any) => {
-          
-          let listaPedidos = [];
-          
-          if (respuesta && respuesta.data && Array.isArray(respuesta.data)) {
-            listaPedidos = respuesta.data;
+          if (respuesta?.data && Array.isArray(respuesta.data)) {
+            this.pedidos = respuesta.data;
           } else if (Array.isArray(respuesta)) {
-            listaPedidos = respuesta;
+            this.pedidos = respuesta;
           }
-
           this.loading = false;
         },
         error: (err) => {
@@ -52,9 +49,10 @@ export class MisPedidosPage implements OnInit {
     }
   }
 
-  toggleDetalle(id: string): void {
-    this.pedidoExpandido = this.pedidoExpandido === id ? null : id;
-  }
+  toggleDetalle(id: any): void {
+  const idStr = String(id);
+  this.pedidoExpandido = this.pedidoExpandido === idStr ? null : idStr;
+}
 
   getEstadoClase(estado: string): string {
     const estados: { [key: string]: string } = {

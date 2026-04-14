@@ -12,22 +12,22 @@ export class ProductosService {
   private API_PRODUCTOS = 'http://localhost:8080/productos';
 
   // Obtener todos los productos 
-  getProducto(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(this.API_PRODUCTOS);
+  getProducto(): Observable<{ success: boolean; data: Producto[] }> {
+    return this.http.get<{ success: boolean; data: Producto[] }>(this.API_PRODUCTOS);
   }
   
   // Obtener un producto por ID
-  getProductoById(id: number | string): Observable<Producto> {
-    return this.http.get<Producto>(`${this.API_PRODUCTOS}/${id}`);
+  getProductoById(id: number | string): Observable<{ success: boolean; data: Producto }> {
+    return this.http.get<{ success: boolean; data: Producto }>(`${this.API_PRODUCTOS}/${id}`);
   }
 
   // Crear un nuevo producto
-  addProducto(producto: Producto): Observable<Producto> {
+  postProducto(producto: Producto): Observable<Producto> {
     return this.http.post<Producto>(this.API_PRODUCTOS, producto);
   }
 
   // Actualizar un producto
-  updateProducto(id: number | string, producto: Producto): Observable<Producto> {
+  putProducto(id: number | string, producto: Producto): Observable<Producto> {
     return this.http.put<Producto>(`${this.API_PRODUCTOS}/${id}`, producto);
   }
 
