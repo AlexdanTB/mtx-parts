@@ -23,7 +23,7 @@ export const routes: Routes = [
     { path: 'logins', component: LoginRegisterPage, canActivate: [canActiveGuard] },
     { path: 'login', component: Login },
     { path: 'carrito', component: CarritoPage, canActivate: [canActiveGuard] },
-    { path: 'mis-pedidos', component: MisPedidosPage, canActivate: [canActiveGuard] },
+    { path: 'pedidos', component: MisPedidosPage, canActivate: [canActiveGuard] },
     { path: 'perfil', component: PerfilPage, canActivate: [canActiveGuard] },
     { path: 'dashboard', component: Dashboard, canActivate: [canActiveGuard] }
 ];

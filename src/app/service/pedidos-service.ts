@@ -7,37 +7,32 @@ import { Pedido } from '../models/pedido';
   providedIn: 'root',
 })
 export class PedidosService {
-  private readonly API_URL = 'https://projectmtx-68218-default-rtdb.firebaseio.com/pedidos';
+  private readonly API_PEDIDO = 'http://localhost:8080/pedidos';
   private http = inject(HttpClient);
-
+// Mantenemos tus señales
+  sesionIniciada = signal<boolean>(localStorage.getItem('sesion') === 'true');
   pedidos = signal<Pedido[]>([]);
 
-  getPedidos(): Observable<Pedido[]> {
-    return this.http.get<Pedido[]>(`${this.API_URL}.json`);
+  // 1. Obtener todos (Solo si eres ADMIN, si no, te dará 405 si no tienes GetMapping en Java)
+  getPedidos(): Observable<any> {
+    return this.http.get<any>(`${this.API_PEDIDO}`);
   }
 
-  getPedidosPorUsuario(idUsuario: string): Observable<Pedido[]> {
-    return new Observable(observer => {
-      this.getPedidos().subscribe({
-        next: (pedidos) => {
-          const pedidosUsuario = pedidos.filter(p => p.idUsuario === idUsuario);
-          this.pedidos.set(pedidosUsuario);
-          observer.next(pedidosUsuario);
-        },
-        error: (err) => observer.error(err)
-      });
-    });
+  // 🟢 2. CORREGIDO: Llamada directa al endpoint del usuario
+  getPedidosPorUsuario(idUsuario: string | number): Observable<any> {
+    return this.http.get<any>(`${this.API_PEDIDO}/usuario/${idUsuario}`);
   }
 
-  postPedido(pedido: Pedido): Observable<{ name: string }> {
-    return this.http.post<{ name: string }>(`${this.API_URL}.json`, pedido);
+  // 🟢 3. POST: Para guardar el carrito
+  postPedido(pedido: Pedido): Observable<any> {
+    return this.http.post<any>(`${this.API_PEDIDO}`, pedido);
   }
 
   putPedido(id: string, pedido: Pedido): Observable<Pedido> {
-    return this.http.put<Pedido>(`${this.API_URL}/${id}.json`, pedido);
+    return this.http.put<Pedido>(`${this.API_PEDIDO}/${id}`, pedido);
   }
 
   deletePedido(id: string): Observable<null> {
-    return this.http.delete<null>(`${this.API_URL}/${id}.json`);
+    return this.http.delete<null>(`${this.API_PEDIDO}/${id}`);
   }
 }

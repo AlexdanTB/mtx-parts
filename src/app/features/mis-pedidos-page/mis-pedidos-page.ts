@@ -30,13 +30,20 @@ export class MisPedidosPage implements OnInit {
     const usuario = this.usuariosService.usuarioAutenticado();
     if (usuario?.id) {
       this.pedidosService.getPedidosPorUsuario(usuario.id).subscribe({
-        next: (pedidos) => {
-          this.pedidos = pedidos.sort((a, b) => 
-            new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
-          );
+        next: (respuesta: any) => {
+          
+          let listaPedidos = [];
+          
+          if (respuesta && respuesta.data && Array.isArray(respuesta.data)) {
+            listaPedidos = respuesta.data;
+          } else if (Array.isArray(respuesta)) {
+            listaPedidos = respuesta;
+          }
+
           this.loading = false;
         },
-        error: () => {
+        error: (err) => {
+          console.error('Error al cargar pedidos:', err);
           this.loading = false;
         }
       });

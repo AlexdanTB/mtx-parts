@@ -5,6 +5,7 @@ import { CarritoService } from '../../service/carrito-service';
 import { PedidosService } from '../../service/pedidos-service';
 import { AuthService } from '../../service/auth-service';
 import { UsuariosService } from '../../service/usuarios-service';
+import { Pedido } from '../../models/pedido';
 
 @Component({
   selector: 'app-carrito-page',
@@ -13,6 +14,7 @@ import { UsuariosService } from '../../service/usuarios-service';
   styleUrl: './carrito-page.css',
 })
 export class CarritoPage {
+
   private carritoService = inject(CarritoService);
   private pedidosService = inject(PedidosService);
   private authService = inject(AuthService);
@@ -23,10 +25,18 @@ export class CarritoPage {
   cantidadTotal = this.carritoService.cantidadTotal;
   totalCarrito = this.carritoService.totalCarrito;
 
-  actualizarCantidad(idProducto: string, event: Event): void {
+ actualizarCantidad(idProducto: string, nuevaCantidad: number): void {
+    if (nuevaCantidad < 1) return; 
+    this.carritoService.actualizarCantidad(idProducto, nuevaCantidad);
+  }
+
+  cambiarCantidadDesdeInput(idProducto: string, event: Event): void {
     const input = event.target as HTMLInputElement;
     const cantidad = parseInt(input.value, 10);
-    this.carritoService.actualizarCantidad(idProducto, cantidad);
+    
+    if (!isNaN(cantidad) && cantidad >= 1) {
+      this.actualizarCantidad(idProducto, cantidad);
+    }
   }
 
   eliminarItem(idProducto: string): void {
@@ -41,42 +51,32 @@ export class CarritoPage {
     return 'PED-' + Date.now().toString(36).toUpperCase();
   }
 
-  confirmarPedido(): void {
-    if (!this.authService.sesionIniciada()) {
-      alert('Debes iniciar sesión para realizar un pedido');
-      this.router.navigate(['/login']);
-      return;
+ confirmarPedido(): void {
+  const usuario = this.usuariosService.usuarioAutenticado();
+  if (!usuario || !usuario.id) return;
+
+  const datosParaBackend = {
+    idUsuario: Number(usuario.id), 
+    direccionEnvio: usuario.address || 'Quito', 
+    detalles: this.items().map(item => ({
+      productoId: Number(item.idProducto), 
+      cantidad: Number(item.cantidad)
+    }))
+  };
+
+  console.log('Datos enviados al backend:', datosParaBackend);
+
+  this.pedidosService.postPedido(datosParaBackend as any).subscribe({
+    next: () => {
+      this.carritoService.vaciarCarrito();
+      alert('¡Pedido realizado con éxito!');
+      this.router.navigate(['/mis-pedidos']);
+    },
+    error: (err) => {
+      console.error('Error 400 - Detalles del servidor:', err);
     }
-
-    const usuario = this.usuariosService.usuarioAutenticado();
-    if (!usuario) {
-      alert('No se pudo obtener la información del usuario');
-      return;
-    }
-
-    const pedido = {
-      idUsuario: usuario.id || '',
-      nombreUsuario: usuario.name,
-      emailUsuario: usuario.email,
-      items: this.items(),
-      total: this.totalCarrito(),
-      estado: 'pendiente' as const,
-      fecha: new Date().toISOString(),
-      direccion: '',
-      telefono: ''
-    };
-
-    this.pedidosService.postPedido(pedido).subscribe({
-      next: () => {
-        this.carritoService.vaciarCarrito();
-        alert('¡Pedido realizado con éxito!');
-        this.router.navigate(['/mis-pedidos']);
-      },
-      error: () => {
-        alert('Error al procesar el pedido. Intenta nuevamente.');
-      }
-    });
-  }
+  });
+}
 
   formatPrice(precio: number): string {
     return precio.toLocaleString('es-EC', { style: 'currency', currency: 'USD' });
