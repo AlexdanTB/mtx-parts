@@ -26,7 +26,7 @@ export class FacetedSearch {
   logueado = this.authService.sesionIniciada;
   repuestos = signal<Producto[]>([]);
 
-  // Computed para el filtrado (por ahora muestra todos, luego puedes expandirlo)
+  // Computed para el filtrado 
   repuestosFiltrados = computed(() => {
     return this.repuestos();
   });
@@ -42,9 +42,6 @@ export class FacetedSearch {
         if (respuesta.success && respuesta.data) {
           this.repuestos.set(respuesta.data);
         }
-      },
-      error: (err) => {
-        console.error('Error al cargar el catálogo:', err);
       }
     });
   }

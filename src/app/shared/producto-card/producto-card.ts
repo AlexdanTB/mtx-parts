@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Component, computed, inject, signal } from '@angular/core';
+import { Router, RouterLink } from "@angular/router";
+import { AuthService } from '../../service/auth-service';
+import { CarritoService } from '../../service/carrito-service';
+import { Producto } from '../../models/producto';
 
 @Component({
   selector: 'app-producto-card',
@@ -8,12 +11,8 @@ import { RouterLink } from "@angular/router";
   styleUrl: './producto-card.css',
 })
 export class ProductoCard {
-// Función para calcular el % de descuento automáticamente
-  calcularDescuento(normal: number, descuento: number): number {
-    return Math.round(((normal - descuento) / normal) * 100);
-  }
 
-  // Arreglo con los 6 combos
+  // Arreglo de combos
   combos = [
     {
       id: 1,
@@ -22,7 +21,7 @@ export class ProductoCard {
       precioNormal: 85.00,
       precioDescuento: 65.00,
       imagen: 'https://pierce-images.imgix.net/images/c/0/9/a/c09a18e7f6be4d868695ea4283126dd1_2_PP-4971628_0_10.png?bg=F0F1F2&q=60&auto=format&h=414&w=414',
-      rating: 5.0
+      rating: 5.0,
     },
     {
       id: 2,
@@ -70,4 +69,27 @@ export class ProductoCard {
       rating: 4.9
     }
   ];
+
+  private authService = inject(AuthService);
+  private carritoService = inject(CarritoService);
+  private router = inject(Router);
+
+  agregarComboAlCarrito(combo: any): void {
+    if (!this.authService.sesionIniciada()) {
+      alert('Debes iniciar sesión para comprar');
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.carritoService.agregarItem({
+      idProducto: combo.id,
+      nombre: combo.nombre,
+      precio: combo.precioDescuento,
+      cantidad: 1,
+      imagen: combo.imagen,
+      marca: 'Proveedor MTX' 
+    });
+
+    alert(`¡Combo ${combo.nombre} agregado al carrito!`);
+  }
+
 }
