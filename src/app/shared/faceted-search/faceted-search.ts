@@ -58,9 +58,9 @@ export class FacetedSearch {
       nombre: producto.nombre,
       precio: producto.precio,
       cantidad: 1,
-      imagen: producto.imagen_url || 'assets/no-image.png',
-      marca: this.marcas[0] || 'Marca Desconocida',
-      //categoria: this.categorias[0] || 'Categoría Desconocida'
+      imagen: producto.imagen_url,
+      marca: this.marcas[0],
+      //categoria: this.categorias[0]
     });
 
     alert(`${producto.nombre} agregado al carrito`);

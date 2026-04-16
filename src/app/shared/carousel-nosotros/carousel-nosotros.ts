@@ -79,7 +79,6 @@ export class CarouselNosotros implements OnInit, OnDestroy {
     }
   }
 
-  // Reinicia el contador al navegar manualmente — fix del memory leak
   resetAutoPlay(): void {
     this.clearAutoPlay();
     this.startAutoPlay();

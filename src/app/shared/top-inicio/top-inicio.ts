@@ -36,7 +36,6 @@ export class TopInicio {
   ];
 
   ngOnInit() {
-    // Autoplay del slider
     this.intervalId = setInterval(() => this.next(), 6000);
   }
 
